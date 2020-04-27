@@ -2,13 +2,15 @@ var constraints = { audio: true, video: true };
 navigator.getWebcam = navigator.mediaDevices.getUserMedia;
 
 var peer = new Peer({
-    key: 'lwjd5qra8257b9',
+    host: "custom-peerserver.test",
+    // port: 443,
+    // key: 'lwjd5qra8257b9',
     debug: 3,
     config: {
         'iceServers': [
             { url: 'stun:stun.l.google.com:19302' },
             { url: 'stun:stun1.l.google.com:19302' },
-            { url: 'turn:numb.viagenie.ca', username: "lisa@learnfromlisa.com", credential: "22paris22" }
+            { url: 'turn:numb.viagenie.ca', username: "", credential: "" }
         ]
     }
 });
@@ -40,7 +42,10 @@ $(function () {
 
     // end call
     $('#end-call').on('click', function () {
-        window.existingCall.close();
+        //window.existingCall.close();
+        // peer.disconnect();
+        peer.destroy();
+        location.reload();
         setpTwo();
     });
 
@@ -82,8 +87,8 @@ function stepThree(call) {
     }
 
     // wait for stream on the call, then setup peer video
-    call.on('stream', function (stream) {
-        $('#firend').prop('srcObject', streem);
+    call.on('stream', function (remoteStream) {
+        $('#friend').prop('srcObject', remoteStream);
     });
 
     $('#step1', '#step2').hide();
